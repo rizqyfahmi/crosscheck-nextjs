@@ -11,6 +11,24 @@ export class LoginUsecase {
     }
 
     async call(param: LoginParam): Promise<AuthenticationEntity> {
-        return new Promise<AuthenticationEntity>((resolve, reject) => {}) 
+        return new Promise<AuthenticationEntity>(async (resolve, reject) => {
+            if (!param.username || !param.password) {
+                return reject(
+                    new NullFailure("Insufficient parameter", null)
+                )
+            }
+
+            try {
+                const result: AuthenticationEntity = await this.repo.login(param.username, param.password)
+                resolve(result)
+            } catch (error) {
+                if (error instanceof ServerFailure) {
+                    reject(error)
+                }
+
+                const unexpectedFailure = error as UnexpectedFailure
+                reject(unexpectedFailure)
+            }
+        }) 
     }
 }

@@ -15,7 +15,29 @@ export class AuthenticationRemoteImple implements AuthenticationRemote {
     }
 
     login(username: string, password: string): Promise<AuthenticationModel> {
-        throw new Error("Method not implemented.");
+        return new Promise<AuthenticationModel>(async (resolve, reject) => {
+            const url = `${process.env.API_HOST}/authentication/login`
+            const response = await this.client.post(url,
+                {
+                    username: username,
+                    password: password
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+
+            const result: Response = response.data
+
+            if (response.status != 200) {
+                const error = new ServerFailure(result.message, result)
+                return reject(error)
+            }
+
+            resolve(AuthenticationModel.fromJSON(result.data)) 
+        })
     }
 
 }

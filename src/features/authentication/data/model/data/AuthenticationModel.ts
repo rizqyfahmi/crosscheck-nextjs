@@ -1,3 +1,4 @@
+import { LoginData, Response } from "../../../../../utils/types/types";
 import { AuthenticationEntity } from "../../../domain/entity/AuthenticationEntity";
 
 export class AuthenticationModel extends AuthenticationEntity {
@@ -5,8 +6,8 @@ export class AuthenticationModel extends AuthenticationEntity {
         super(token)
     }
 
-    fromJSON(response: { data: { token: string } }) {
-        return new AuthenticationModel(response.data.token)
+    static fromJSON(data: LoginData) {
+        return new AuthenticationModel(data.token)
     }
 
     toJSON() {

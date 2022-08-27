@@ -29,7 +29,7 @@ describe("Login parameter", () => {
     describe("When login usecase fails to execute authentication repository caught by error response", () => {
         let loginParam: LoginParam;
         let mockAuthenticationRepository: AuthenticationRepository;
-        let failure: NullFailure;
+        let failure: ServerFailure;
 
         beforeEach(() => {
             failure = new ServerFailure("Internal server error", null)
@@ -53,7 +53,7 @@ describe("Login parameter", () => {
     describe("When login usecase fails to execute authentication repository caught by unexpected error", () => {
         let loginParam: LoginParam;
         let mockAuthenticationRepository: AuthenticationRepository;
-        let failure: NullFailure;
+        let failure: UnexpectedFailure;
 
         beforeEach(() => {
             failure = new UnexpectedFailure("NullPointer Exception", null)

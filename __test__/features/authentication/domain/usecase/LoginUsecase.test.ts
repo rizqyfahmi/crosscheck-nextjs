@@ -1,8 +1,8 @@
-import { LoginParam } from "../../../../src/features/authentication/data/model/param/LoginParam";
-import { AuthenticationEntity } from "../../../../src/features/authentication/domain/entity/AuthenticationEntity";
-import { AuthenticationRepository } from "../../../../src/features/authentication/domain/repository/AuthenticationRepository";
-import { LoginUsecase } from "../../../../src/features/authentication/domain/usecase/LoginUsecase";
-import { NullFailure, ServerFailure, UnexpectedFailure } from "../../../../src/utils/exception/failure";
+import { LoginParam } from "../../../../../src/features/authentication/data/model/param/LoginParam";
+import { AuthenticationEntity } from "../../../../../src/features/authentication/domain/entity/AuthenticationEntity";
+import { AuthenticationRepository } from "../../../../../src/features/authentication/domain/repository/AuthenticationRepository";
+import { LoginUsecase } from "../../../../../src/features/authentication/domain/usecase/LoginUsecase";
+import { NullFailure, ServerFailure, UnexpectedFailure } from "../../../../../src/utils/exception/failure";
 
 describe("Login parameter", () => {
     

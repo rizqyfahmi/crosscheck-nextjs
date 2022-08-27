@@ -7,21 +7,29 @@ import { NullFailure, ServerFailure, UnexpectedFailure } from "../../../../../sr
 describe("Login parameter", () => {
     
     describe("When login usecase fails to check the parameters", () => {
-        let loginParam: LoginParam | null;
+        let loginParam: LoginParam;
         let mockAuthenticationRepository: AuthenticationRepository;
-        let failure: NullFailure;
+        let mockResult: NullFailure;
 
         beforeEach(() => {
-            failure = new NullFailure("Insufficient parameter", null)
+            mockResult = new NullFailure("Insufficient parameter", null)
             loginParam = new LoginParam(
                 "johndoe@email.com", ""
             )
+
+            mockAuthenticationRepository = {
+                login: jest.fn().mockImplementation(() => Promise.reject(mockResult))
+            };
         })
 
         it("returns null failure", async () => {
+            const expected = new NullFailure("Insufficient parameter", null)
             
             const usecase = new LoginUsecase(mockAuthenticationRepository)
-            expect(usecase.call(loginParam!)).rejects.toStrictEqual(failure)
+            const login = usecase.call(loginParam)
+
+            expect(login).rejects.toStrictEqual(expected)
+            expect(mockAuthenticationRepository.login).not.toBeCalled()
             
         })
     })
@@ -29,23 +37,28 @@ describe("Login parameter", () => {
     describe("When login usecase fails to execute authentication repository caught by error response", () => {
         let loginParam: LoginParam;
         let mockAuthenticationRepository: AuthenticationRepository;
-        let failure: ServerFailure;
+        let mockResult: ServerFailure;
 
         beforeEach(() => {
-            failure = new ServerFailure("Internal server error", null)
+            mockResult = new ServerFailure("Internal server error", null)
             loginParam = new LoginParam(
                 "johndoe@email.com", "HelloPassword"
             )
 
             mockAuthenticationRepository = {
-                login: jest.fn().mockImplementation(() => Promise.reject(failure))
+                login: jest.fn().mockImplementation(() => Promise.reject(mockResult))
             };
         })
 
         it("returns server failure", async () => {
+            const expected = new ServerFailure("Internal server error", null)
 
             const usecase = new LoginUsecase(mockAuthenticationRepository)
-            expect(usecase.call(loginParam)).rejects.toStrictEqual(failure)
+            const login = usecase.call(loginParam)
+
+            expect(login).rejects.toStrictEqual(expected)
+            expect(mockAuthenticationRepository.login).toBeCalled()
+            expect(mockAuthenticationRepository.login).toBeCalledTimes(1)
 
         })
     })
@@ -53,23 +66,28 @@ describe("Login parameter", () => {
     describe("When login usecase fails to execute authentication repository caught by unexpected error", () => {
         let loginParam: LoginParam;
         let mockAuthenticationRepository: AuthenticationRepository;
-        let failure: UnexpectedFailure;
+        let mockResult: UnexpectedFailure;
 
         beforeEach(() => {
-            failure = new UnexpectedFailure("NullPointer Exception", null)
+            mockResult = new UnexpectedFailure("NullPointer Exception", null)
             loginParam = new LoginParam(
                 "johndoe@email.com", "HelloPassword"
             )
 
             mockAuthenticationRepository = {
-                login: jest.fn().mockImplementation(() => Promise.reject(failure))
+                login: jest.fn().mockImplementation(() => Promise.reject(mockResult))
             };
         })
 
         it("returns unexpected failure", async () => {
+            const expected = new UnexpectedFailure("NullPointer Exception", null)
 
             const usecase = new LoginUsecase(mockAuthenticationRepository)
-            expect(usecase.call(loginParam)).rejects.toStrictEqual(failure)
+            const login = usecase.call(loginParam)
+            
+            expect(login).rejects.toStrictEqual(expected)
+            expect(mockAuthenticationRepository.login).toBeCalled()
+            expect(mockAuthenticationRepository.login).toBeCalledTimes(1)
 
         })
     })
@@ -77,23 +95,28 @@ describe("Login parameter", () => {
     describe("When login usecase successfully execute authentication repository", () => {
         let loginParam: LoginParam;
         let mockAuthenticationRepository: AuthenticationRepository;
-        let result: AuthenticationEntity;
+        let mockResult: AuthenticationEntity;
 
         beforeEach(() => {
-            result = new AuthenticationEntity("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OTAifQ._aG0ukzancZqhL1wvBTJh8G8d3Det5n0WKcPo5C0DCY")
+            mockResult = new AuthenticationEntity("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OTAifQ._aG0ukzancZqhL1wvBTJh8G8d3Det5n0WKcPo5C0DCY")
             loginParam = new LoginParam(
                 "johndoe@email.com", "HelloPassword"
             )
 
             mockAuthenticationRepository = {
-                login: jest.fn().mockImplementation(() => Promise.resolve(result))
+                login: jest.fn().mockImplementation(() => Promise.resolve(mockResult))
             };
         })
 
         it("returns authentication entity", async () => {
+            const expected = new AuthenticationEntity("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OTAifQ._aG0ukzancZqhL1wvBTJh8G8d3Det5n0WKcPo5C0DCY")
 
             const usecase = new LoginUsecase(mockAuthenticationRepository)
-            expect(usecase.call(loginParam)).resolves.toStrictEqual(result)
+            const login = usecase.call(loginParam)
+            
+            expect(login).resolves.toStrictEqual(expected)
+            expect(mockAuthenticationRepository.login).toBeCalled()
+            expect(mockAuthenticationRepository.login).toBeCalledTimes(1)
 
         })
     })

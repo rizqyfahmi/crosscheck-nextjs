@@ -29,6 +29,7 @@ describe("Login", () => {
                 
                 expect(login).rejects.toStrictEqual(expected)
                 expect(mockAuthenticationRemote.login).toBeCalled()
+                expect(mockAuthenticationRemote.login).toBeCalledTimes(1)
             })
         })
 
@@ -56,6 +57,7 @@ describe("Login", () => {
                 
                 expect(login).resolves.toStrictEqual(expected)
                 expect(mockAuthenticationRemote.login).toBeCalled()
+                expect(mockAuthenticationRemote.login).toBeCalledTimes(1)
             })
         })
     })

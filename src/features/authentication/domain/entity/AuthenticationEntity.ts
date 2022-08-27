@@ -1,5 +1,5 @@
 export class AuthenticationEntity {
-    token: string
+    protected token: string
 
     constructor(token: string) {
         this.token = token

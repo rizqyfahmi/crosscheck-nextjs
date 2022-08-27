@@ -5,21 +5,24 @@ import { LoginUsecase } from "../../../../../src/features/authentication/domain/
 import { NullFailure, ServerFailure, UnexpectedFailure } from "../../../../../src/utils/exception/failure";
 
 describe("Login parameter", () => {
+
+    let mockAuthenticationRepository: jest.Mocked<AuthenticationRepository>;
+    beforeEach(() => {
+        mockAuthenticationRepository = {
+            login: jest.fn()
+        };
+    })
     
     describe("When login usecase fails to check the parameters", () => {
+        
         let loginParam: LoginParam;
-        let mockAuthenticationRepository: AuthenticationRepository;
         let mockResult: NullFailure;
 
         beforeEach(() => {
+            loginParam = new LoginParam("johndoe@email.com", "")
+                
             mockResult = new NullFailure("Insufficient parameter", null)
-            loginParam = new LoginParam(
-                "johndoe@email.com", ""
-            )
-
-            mockAuthenticationRepository = {
-                login: jest.fn().mockImplementation(() => Promise.reject(mockResult))
-            };
+            mockAuthenticationRepository.login.mockImplementation(() => Promise.reject(mockResult))
         })
 
         it("returns null failure", async () => {
@@ -35,19 +38,15 @@ describe("Login parameter", () => {
     })
 
     describe("When login usecase fails to execute authentication repository caught by error response", () => {
+        
         let loginParam: LoginParam;
-        let mockAuthenticationRepository: AuthenticationRepository;
         let mockResult: ServerFailure;
 
         beforeEach(() => {
+            loginParam = new LoginParam("johndoe@email.com", "HelloPassword")
+            
             mockResult = new ServerFailure("Internal server error", null)
-            loginParam = new LoginParam(
-                "johndoe@email.com", "HelloPassword"
-            )
-
-            mockAuthenticationRepository = {
-                login: jest.fn().mockImplementation(() => Promise.reject(mockResult))
-            };
+            mockAuthenticationRepository.login.mockImplementation(() => Promise.reject(mockResult));
         })
 
         it("returns server failure", async () => {
@@ -64,19 +63,15 @@ describe("Login parameter", () => {
     })
 
     describe("When login usecase fails to execute authentication repository caught by unexpected error", () => {
+        
         let loginParam: LoginParam;
-        let mockAuthenticationRepository: AuthenticationRepository;
         let mockResult: UnexpectedFailure;
 
         beforeEach(() => {
+            loginParam = new LoginParam("johndoe@email.com", "HelloPassword")
+            
             mockResult = new UnexpectedFailure("NullPointer Exception", null)
-            loginParam = new LoginParam(
-                "johndoe@email.com", "HelloPassword"
-            )
-
-            mockAuthenticationRepository = {
-                login: jest.fn().mockImplementation(() => Promise.reject(mockResult))
-            };
+            mockAuthenticationRepository.login.mockImplementation(() => Promise.reject(mockResult));
         })
 
         it("returns unexpected failure", async () => {
@@ -88,24 +83,19 @@ describe("Login parameter", () => {
             expect(login).rejects.toStrictEqual(expected)
             expect(mockAuthenticationRepository.login).toBeCalled()
             expect(mockAuthenticationRepository.login).toBeCalledTimes(1)
-
         })
     })
 
     describe("When login usecase successfully execute authentication repository", () => {
+        
         let loginParam: LoginParam;
-        let mockAuthenticationRepository: AuthenticationRepository;
         let mockResult: AuthenticationEntity;
 
         beforeEach(() => {
+            loginParam = new LoginParam("johndoe@email.com", "HelloPassword")
+            
             mockResult = new AuthenticationEntity("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OTAifQ._aG0ukzancZqhL1wvBTJh8G8d3Det5n0WKcPo5C0DCY")
-            loginParam = new LoginParam(
-                "johndoe@email.com", "HelloPassword"
-            )
-
-            mockAuthenticationRepository = {
-                login: jest.fn().mockImplementation(() => Promise.resolve(mockResult))
-            };
+            mockAuthenticationRepository.login.mockImplementation(() => Promise.resolve(mockResult));
         })
 
         it("returns authentication entity", async () => {
@@ -117,7 +107,6 @@ describe("Login parameter", () => {
             expect(login).resolves.toStrictEqual(expected)
             expect(mockAuthenticationRepository.login).toBeCalled()
             expect(mockAuthenticationRepository.login).toBeCalledTimes(1)
-
         })
     })
     

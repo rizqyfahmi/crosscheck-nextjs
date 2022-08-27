@@ -1,3 +1,4 @@
+import { AuthenticationModel } from "../../../../../src/features/authentication/data/model/data/AuthenticationModel"
 import { AuthenticationRepositoryImpl } from "../../../../../src/features/authentication/data/repository/AuthenticationRepositoryImpl"
 import { AuthenticationRemote } from "../../../../../src/features/authentication/data/source/AuthenticationRemote"
 import { AuthenticationEntity } from "../../../../../src/features/authentication/domain/entity/AuthenticationEntity"
@@ -5,20 +6,25 @@ import { ServerFailure } from "../../../../../src/utils/exception/failure"
 
 describe("Login", () => {
     describe("Username and password as the parameter", () => {
+
+        let mockAuthenticationRemote: jest.Mocked<AuthenticationRemote>
+        beforeEach(() => {
+            mockAuthenticationRemote = {
+                login: jest.fn()
+            }
+        })
+
         describe("When authentication repository get error response from remote data source", () => {
+            
             let username: string, password: string
-            let mockAuthenticationRemote: AuthenticationRemote
             let mockResult: ServerFailure
             
-            beforeAll(() => {
+            beforeEach(() => {
                 username = "johndoe@email.com"
                 password = "Hello Password"
 
                 mockResult = new ServerFailure("Internal server error", null)
-
-                mockAuthenticationRemote = {
-                    login: jest.fn().mockImplementation(() => Promise.reject(mockResult)),
-                }
+                mockAuthenticationRemote.login.mockImplementation(() => Promise.reject(mockResult))
             })
 
             it("returns server failure", async () => {
@@ -34,19 +40,18 @@ describe("Login", () => {
         })
 
         describe("When authentication repository get succcess response from remote data source", () => {
+            
             let username: string, password: string
-            let mockAuthenticationRemote: AuthenticationRemote
             let mockResult: AuthenticationEntity;
             
-            beforeAll(() => {
+            beforeEach(() => {
                 username = "johndoe@email.com"
                 password = "Hello Password"
 
-                mockResult = new AuthenticationEntity("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OTAifQ._aG0ukzancZqhL1wvBTJh8G8d3Det5n0WKcPo5C0DCY")
-
-                mockAuthenticationRemote = {
-                    login: jest.fn().mockImplementation(() => Promise.resolve(mockResult)),
-                }
+                mockResult = new AuthenticationModel("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OTAifQ._aG0ukzancZqhL1wvBTJh8G8d3Det5n0WKcPo5C0DCY")
+                mockAuthenticationRemote.login.mockImplementation(() => new Promise((resolve) => {
+                    return mockResult as AuthenticationEntity
+                }))
             })
 
             it("returns authentication entity", async () => {

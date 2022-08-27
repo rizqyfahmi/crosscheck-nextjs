@@ -16,7 +16,7 @@ export class AuthenticationRepositoryImpl implements AuthenticationRepository {
         return new Promise(async (resolve, reject) => {
             try {
                 const model: AuthenticationModel = await this.remote.login(username, password)
-                resolve(model)
+                resolve(model as AuthenticationEntity)
             } catch (error) {
                 const serverFailure = error as ServerFailure
                 reject(serverFailure)

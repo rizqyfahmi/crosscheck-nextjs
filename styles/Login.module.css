@@ -1,0 +1,43 @@
+.rootContainer {
+    @apply grid grid-cols-12 h-full
+}
+
+.welcomeContainer {
+    @apply col-span-8 h-full bg-crosscheck-dark p-4 flex flex-col justify-center
+}
+
+.illustrationContainer {
+    @apply grid grid-cols-12
+}
+
+.illustrationContentContainer {
+    @apply col-span-10 col-start-2
+}
+
+.loginContainer {
+    @apply col-span-4 h-full flex flex-col justify-center
+}
+
+.loginFormContainer {
+    @apply grid grid-cols-12 mb-4
+}
+
+.loginWelcome {
+    @apply font-bold text-2xl mb-3
+}
+
+.loginDescription {
+    @apply text-xs text-crosscheck-grey mb-8 text-center
+}
+
+.usernameField {
+    @apply p-4 border-2 col-span-8 col-start-3 border-crosscheck-grey-border rounded-xl placeholder-crosscheck-grey mb-4
+}
+
+.passwordField {
+    @apply p-4 border-2 col-span-8 col-start-3 border-crosscheck-grey-border rounded-xl placeholder-crosscheck-grey mb-8
+}
+
+.submitButton {
+    @apply bg-primary rounded-full p-4 col-span-8 col-start-3 text-white
+}

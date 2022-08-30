@@ -1,4 +1,4 @@
-import { Failure, NullFailure, ServerFailure, UnexpectedFailure } from "../../../../utils/exception/failure";
+import { NullFailure, ServerFailure, UnexpectedFailure } from "../../../../utils/exception/failure";
 import { LoginParam } from "../../data/model/param/LoginParam";
 import { AuthenticationEntity } from "../entity/AuthenticationEntity";
 import { AuthenticationRepository } from "../repository/AuthenticationRepository";

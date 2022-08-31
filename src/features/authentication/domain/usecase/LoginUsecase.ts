@@ -1,17 +1,21 @@
+import { inject, injectable } from "inversify";
 import { NullFailure, ServerFailure, UnexpectedFailure } from "../../../../utils/exception/failure";
+import { ContainerType } from "../../../../utils/locator/ContainerType";
 import { LoginParam } from "../../data/model/param/LoginParam";
 import { AuthenticationEntity } from "../entity/AuthenticationEntity";
-import { AuthenticationRepository } from "../repository/AuthenticationRepository";
+import type { AuthenticationRepository } from "../repository/AuthenticationRepository";
 
+@injectable()
 export class LoginUsecase {
-    repo: AuthenticationRepository
+    private repo: AuthenticationRepository
 
-    constructor(repo: AuthenticationRepository) {
+    constructor(@inject(ContainerType.AuthenticationRepository) repo: AuthenticationRepository) {
         this.repo = repo
     }
 
     async call(param: LoginParam): Promise<AuthenticationEntity> {
         return new Promise<AuthenticationEntity>(async (resolve, reject) => {
+            // resolve(new AuthenticationEntity("hello token"))
             if (!param.username || !param.password) {
                 return reject(
                     new NullFailure("Insufficient parameter", null)

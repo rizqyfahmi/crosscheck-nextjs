@@ -34,5 +34,13 @@ export function useService<T>(identifier: interfaces.ServiceIdentifier<T>): T {
 }
 
 const container = new Container()
+container.bind<Axios>(ContainerType.Axios).toConstantValue(
+    axios.create({
+        baseURL: process.env.API_HOST
+    })
+)
+container.bind<AuthenticationRemote>(ContainerType.AuthenticationRemote).to(AuthenticationRemoteImpl)
+container.bind<AuthenticationRepository>(ContainerType.AuthenticationRepository).to(AuthenticationRemoteImpl)
+container.bind<LoginUsecase>(ContainerType.LoginUsecase).toSelf
 
 export default container

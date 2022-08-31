@@ -1,11 +1,15 @@
-import { NextPage } from "next"
-import { ChangeEvent, MouseEvent, useState } from "react";
+import React, { ChangeEvent, MouseEvent, useState } from "react";
 import styles from "../../../../../styles/Login.module.css";
+import { useService } from "../../../../utils/locator/locator";
+import { LoginParam } from "../../data/model/param/LoginParam";
+import { AuthenticationEntity } from "../../domain/entity/AuthenticationEntity";
+import { LoginUsecase } from "../../domain/usecase/LoginUsecase";
 
-export const Login: NextPage = () => {
+export const Login: React.FC = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [test, setTest] = useState("")
+    const loginUsecase: LoginUsecase = useService(LoginUsecase)
 
     const onChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value)
@@ -15,8 +19,10 @@ export const Login: NextPage = () => {
         setPassword(e.target.value)
     }
 
-    const onSubmit = (e: MouseEvent<HTMLButtonElement>) => {
-        setTest(`${username} - ${password}`)
+    const onSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+        const loginParam = new LoginParam(username, password)
+        const result: AuthenticationEntity = await loginUsecase.call(loginParam)
+        setTest(result.getToken())
     } 
 
     return (

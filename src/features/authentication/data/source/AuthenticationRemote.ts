@@ -1,5 +1,7 @@
-import axios, { AxiosStatic } from "axios";
+import type { Axios } from "axios";
+import { inject, injectable } from "inversify";
 import { ServerFailure } from "../../../../utils/exception/failure";
+import { ContainerType } from "../../../../utils/locator/ContainerType";
 import { Response } from "../../../../utils/types/types";
 import { AuthenticationModel } from "../model/data/AuthenticationModel";
 
@@ -7,16 +9,17 @@ export interface AuthenticationRemote {
     login(username: string, password: string): Promise<AuthenticationModel>
 }
 
-export class AuthenticationRemoteImple implements AuthenticationRemote {
-    client: AxiosStatic
+@injectable()
+export class AuthenticationRemoteImpl implements AuthenticationRemote {
+    client: Axios
 
-    constructor(client: AxiosStatic) {
+    constructor(@inject(ContainerType.Axios) client: Axios) {
         this.client = client
     }
 
     login(username: string, password: string): Promise<AuthenticationModel> {
         return new Promise<AuthenticationModel>(async (resolve, reject) => {
-            const url = `${process.env.API_HOST}/authentication/login`
+            const url = `/authentication/login`
             const response = await this.client.post(url,
                 {
                     username: username,

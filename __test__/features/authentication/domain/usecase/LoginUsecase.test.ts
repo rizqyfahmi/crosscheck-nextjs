@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { LoginParam } from "../../../../../src/features/authentication/data/model/param/LoginParam";
 import { AuthenticationEntity } from "../../../../../src/features/authentication/domain/entity/AuthenticationEntity";
 import { AuthenticationRepository } from "../../../../../src/features/authentication/domain/repository/AuthenticationRepository";

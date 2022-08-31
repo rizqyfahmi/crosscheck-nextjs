@@ -1,11 +1,10 @@
+import "reflect-metadata";
 import axios from 'axios';
 import { AuthenticationModel } from '../../../../../src/features/authentication/data/model/data/AuthenticationModel';
-import { AuthenticationRemoteImple } from '../../../../../src/features/authentication/data/source/AuthenticationRemote';
+import { AuthenticationRemoteImpl } from '../../../../../src/features/authentication/data/source/AuthenticationRemote';
 import { ServerFailure } from '../../../../../src/utils/exception/failure';
+
 jest.mock('axios');
-
-
-
 describe("Login", () => {
     
     let username: string, password: string
@@ -37,7 +36,7 @@ describe("Login", () => {
                     config: {},
                 })
 
-                const source = new AuthenticationRemoteImple(mockAxios)
+                const source = new AuthenticationRemoteImpl(mockAxios)
                 const login = source.login(username, password)
 
                 expect(login).rejects.toStrictEqual(expected)
@@ -63,7 +62,7 @@ describe("Login", () => {
                     config: {},
                 })
 
-                const source = new AuthenticationRemoteImple(mockAxios)
+                const source = new AuthenticationRemoteImpl(mockAxios)
                 const login = source.login(username, password)
 
                 expect(login).resolves.toStrictEqual(expected)

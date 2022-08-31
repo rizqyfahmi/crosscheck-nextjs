@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { AuthenticationModel } from "../../../../../src/features/authentication/data/model/data/AuthenticationModel"
 import { AuthenticationRepositoryImpl } from "../../../../../src/features/authentication/data/repository/AuthenticationRepositoryImpl"
 import { AuthenticationRemote } from "../../../../../src/features/authentication/data/source/AuthenticationRemote"
